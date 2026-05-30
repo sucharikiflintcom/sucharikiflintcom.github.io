@@ -1,249 +1,559 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aleksandr Kojima</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Lora:wght@400&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      background: #161614;
-      color: #7a7a74;
-      font-family: 'Inter', sans-serif;
-      font-weight: 300;
-      min-height: 100vh;
-    }
-    main {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 5rem 3.5rem 7rem;
-    }
-    .name {
-      font-family: 'Lora', serif;
-      font-size: 28px;
-      color: #e8e4dc;
-      font-weight: 400;
-      letter-spacing: -.01em;
-      margin-bottom: 4rem;
-    }
-    .label {
-      font-size: 10px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: #666660;
-      margin-bottom: .7rem;
-    }
-    .count {
-      font-size: 44px;
-      font-weight: 300;
-      color: #e8e4dc;
-      line-height: 1;
-      letter-spacing: -.02em;
-    }
-    .count-sub {
-      font-size: 11px;
-      color: #555550;
-      margin-top: .35rem;
-      letter-spacing: .04em;
-    }
-    .divider {
-      border: none;
-      border-top: 1px solid #222;
-      margin: 2.5rem 0;
-    }
-    .contrib-wrap { overflow-x: auto; padding-bottom: 2px; }
-    #contrib-grid { display: flex; gap: 3px; }
-    .contrib-col { display: flex; flex-direction: column; gap: 3px; }
-    .cell { width: 11px; height: 11px; border-radius: 2px; background: #0e0e0c; }
-    .cell.l1 { background: #2e2c28; }
-    .cell.l2 { background: #4e4840; }
-    .cell.l3 { background: #6e6258; }
-    .cell.l4 { background: #9a8c7e; }
-    .contrib-note { font-size: 11px; color: #555550; margin-top: .6rem; letter-spacing: .04em; }
-    .comments { display: flex; flex-direction: column; gap: 1.2rem; }
-    .cm { padding-left: .9rem; border-left: 1px solid #2e2e2c; }
-    .cm-meta { font-size: 11px; color: #555550; letter-spacing: .03em; margin-bottom: .25rem; }
-    .cm-text { font-size: 13px; color: #9a9690; line-height: 1.65; }
-    .empty { font-size: 12px; color: #444440; }
-    .input-wrap { margin-top: 1.8rem; display: flex; flex-direction: column; gap: .5rem; }
-    .inp {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid #2a2a28;
-      color: #e8e4dc;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 300;
-      padding: .5rem 0;
-      outline: none;
-      width: 100%;
-      transition: border-color .2s;
-    }
-    .inp:focus { border-bottom-color: #666; }
-    .inp::placeholder { color: #383836; }
-    .send {
-      align-self: flex-start;
-      margin-top: .5rem;
-      background: transparent;
-      border: none;
-      color: #666660;
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      font-weight: 300;
-      cursor: pointer;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: 0;
-      transition: color .2s;
-    }
-    .send:hover { color: #e8e4dc; }
-    .send:disabled { opacity: .3; cursor: default; }
-    @media (max-width: 600px) {
-      main { padding: 3.5rem 1.5rem 5rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aleksandr Kojima</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0b;
+    --surface: #111113;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #e8e8e2;
+    --muted: #5a5a56;
+    --accent: #c8c4b0;
+    --green-dim: #2a3d2e;
+    --green-bright: #4ade80;
+    --green-mid: #86efac;
+  }
+
+  html { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 24px 120px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* --- HEADER --- */
+  .header { width: 100%; margin-bottom: 72px; }
+
+  .name {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .name em { font-style: italic; color: var(--accent); }
+
+  .tagline {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+    max-width: 380px;
+  }
+
+  /* --- VIEWS --- */
+  .views-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 28px;
+  }
+
+  .views-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  .views-count {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* --- SECTION LABEL --- */
+  .section-label {
+    width: 100%;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    margin-top: 56px;
+  }
+
+  /* --- GITHUB GRID --- */
+  .contrib-wrap {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  #contrib-grid {
+    display: flex;
+    gap: 3px;
+    min-width: max-content;
+  }
+
+  .week-col { display: flex; flex-direction: column; gap: 3px; }
+
+  .day-cell {
+    width: 11px; height: 11px;
+    border-radius: 2px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: border-color 0.15s;
+    cursor: default;
+  }
+
+  .day-cell:hover { border-color: var(--border-hover); }
+  .day-cell[data-level="1"] { background: #1a2e1c; border-color: #2a4a2e; }
+  .day-cell[data-level="2"] { background: #22582a; border-color: #2d7036; }
+  .day-cell[data-level="3"] { background: #2da44e; border-color: #38c65e; }
+  .day-cell[data-level="4"] { background: #4ade80; border-color: #6bef99; }
+
+  .contrib-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .contrib-total { font-size: 12px; color: var(--muted); }
+
+  .contrib-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .contrib-legend span { font-size: 10px; color: var(--muted); }
+  .legend-cell { width: 11px; height: 11px; border-radius: 2px; border: 1px solid var(--border); }
+  .legend-cell.l0 { background: var(--surface); }
+  .legend-cell.l1 { background: #1a2e1c; border-color: #2a4a2e; }
+  .legend-cell.l2 { background: #22582a; border-color: #2d7036; }
+  .legend-cell.l3 { background: #2da44e; border-color: #38c65e; }
+  .legend-cell.l4 { background: #4ade80; border-color: #6bef99; }
+
+  /* --- DIVIDER --- */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin-top: 56px;
+  }
+
+  /* --- COMMENTS --- */
+  .comments-list { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+
+  .comment {
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    transition: border-color 0.2s;
+  }
+
+  .comment:hover { border-color: var(--border-hover); }
+
+  .comment-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .comment-author { font-size: 12px; color: var(--accent); letter-spacing: 0.03em; }
+  .comment-time { font-size: 11px; color: var(--muted); }
+  .comment-text { font-size: 13px; color: var(--text); line-height: 1.65; opacity: 0.85; }
+
+  .show-more-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 4px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .show-more-btn:hover { border-color: var(--border-hover); color: var(--text); }
+
+  /* --- COMMENT FORM --- */
+  .comment-form {
+    width: 100%;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-row { display: flex; gap: 10px; }
+
+  .comment-form input,
+  .comment-form textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+
+  .comment-form input::placeholder,
+  .comment-form textarea::placeholder { color: var(--muted); }
+
+  .comment-form input:focus,
+  .comment-form textarea:focus { border-color: var(--border-hover); }
+
+  .submit-btn {
+    background: none;
+    border: 1px solid var(--border-hover);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 11px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .submit-btn:hover { background: rgba(255,255,255,0.05); }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .form-status { font-size: 12px; color: var(--muted); }
+  .form-status.ok { color: #4ade80; }
+  .form-status.err { color: #f87171; }
+
+  /* --- FOOTER --- */
+  .footer {
+    width: 100%;
+    margin-top: 72px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-name { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+  .footer-year { font-size: 11px; color: var(--muted); }
+
+  /* --- SKELETON --- */
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface) 25%, #1a1a1e 50%, var(--surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 2px;
+  }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  .error-msg { font-size: 12px; color: var(--muted); padding: 16px 0; }
+</style>
 </head>
 <body>
-<main>
 
-  <div class="name">Aleksandr Kojima</div>
-
-  <div class="label">visitors</div>
-  <div class="count" id="cnt">—</div>
-  <div class="count-sub">since the beginning</div>
-
-  <hr class="divider" />
-
-  <div class="label">contributions</div>
-  <div class="contrib-wrap">
-    <div id="contrib-grid"></div>
+<!-- HEADER -->
+<header class="header">
+  <h1 class="name">Aleksandr <em>Kojima</em></h1>
+  <p class="tagline">building things quietly.</p>
+  <div class="views-row">
+    <div class="views-dot"></div>
+    <span class="views-count" id="views-count">— views</span>
   </div>
-  <div class="contrib-note" id="contrib-note">loading...</div>
+</header>
 
-  <hr class="divider" />
-
-  <div class="label">comments</div>
-  <div class="comments" id="comments">
-    <div class="empty">loading...</div>
+<!-- GITHUB ACTIVITY -->
+<p class="section-label">github activity</p>
+<div class="contrib-wrap">
+  <div id="contrib-grid"><div style="display:flex;gap:3px;" id="skel-wrap"></div></div>
+</div>
+<div class="contrib-footer">
+  <span class="contrib-total" id="contrib-total"></span>
+  <div class="contrib-legend">
+    <span>less</span>
+    <div class="legend-cell l0"></div>
+    <div class="legend-cell l1"></div>
+    <div class="legend-cell l2"></div>
+    <div class="legend-cell l3"></div>
+    <div class="legend-cell l4"></div>
+    <span>more</span>
   </div>
+</div>
 
-  <div class="input-wrap">
-    <input class="inp" id="nameIn" placeholder="name" maxlength="40" />
-    <input class="inp" id="msgIn" placeholder="leave a comment" maxlength="300" />
-    <button class="send" id="sendBtn" onclick="postComment()">submit →</button>
+<div class="divider"></div>
+
+<!-- COMMENTS -->
+<p class="section-label">comments</p>
+<div class="comments-list" id="comments-list">
+  <p class="error-msg" id="comments-loading">loading...</p>
+</div>
+
+<div class="comment-form">
+  <div class="form-row">
+    <input type="text" id="inp-name" placeholder="name" maxlength="40">
+    <input type="text" id="inp-url" placeholder="url (optional)" maxlength="100">
   </div>
+  <textarea id="inp-text" rows="3" placeholder="leave a comment..." maxlength="500"></textarea>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <button class="submit-btn" id="submit-btn">send →</button>
+    <span class="form-status" id="form-status"></span>
+  </div>
+</div>
 
-</main>
+<!-- FOOTER -->
+<footer class="footer">
+  <span class="footer-name">aleksandr kojima</span>
+  <span class="footer-year" id="footer-year"></span>
+</footer>
+
 <script>
-  const SUPABASE_URL = 'https://botozcvdxnmhikziqtbx.supabase.co';
-  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvdG96Y3ZkeG5taGlremlxdGJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTQ4OTgsImV4cCI6MjA5NTY3MDg5OH0.kreHeUyGY5OoAzYlR1Kz4Nvbw1bHwkP4mAxFMahMg08';
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const SUPABASE_URL = 'https://botozcvdxnmhikziqtbx.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvdG96Y3ZkeG5taGlremlxdGJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTQ4OTgsImV4cCI6MjA5NTY3MDg5OH0.kreHeUyGY5OoAzYlR1Kz4Nvbw1bHwkP4mAxFMahMg08';
+const GH_USER = 'sucharikiflintcom';
 
-  async function incrementViews() {
-    const { data } = await sb.from('views').select('count').eq('id', 1).single();
-    if (!data) return;
-    const newCount = data.count + 1;
-    await sb.from('views').update({ count: newCount }).eq('id', 1);
-    document.getElementById('cnt').textContent = newCount.toLocaleString();
-  }
+document.getElementById('footer-year').textContent = new Date().getFullYear();
 
-  async function loadComments() {
-    const { data } = await sb.from('comments').select('*').order('created_at', { ascending: false });
-    const el = document.getElementById('comments');
-    if (!data || data.length === 0) {
-      el.innerHTML = '<div class="empty">no comments yet</div>';
-      return;
-    }
-    el.innerHTML = data.map(c => `
-      <div class="cm">
-        <div class="cm-meta">— ${esc(c.name)} · ${timeAgo(new Date(c.created_at))}</div>
-        <div class="cm-text">${esc(c.message)}</div>
-      </div>`).join('');
-  }
+/* -------- VIEWS -------- */
+async function sb(path, opts = {}) {
+  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      Prefer: opts.prefer || '',
+      ...opts.headers
+    },
+    method: opts.method || 'GET',
+    body: opts.body ? JSON.stringify(opts.body) : undefined
+  });
+  if (!res.ok) throw new Error(await res.text());
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
 
-  async function postComment() {
-    const name = document.getElementById('nameIn').value.trim() || 'stranger';
-    const message = document.getElementById('msgIn').value.trim();
-    if (!message) return;
-    const btn = document.getElementById('sendBtn');
-    btn.disabled = true;
-    btn.textContent = '...';
-    await sb.from('comments').insert({ name, message });
-    document.getElementById('nameIn').value = '';
-    document.getElementById('msgIn').value = '';
-    await loadComments();
-    btn.disabled = false;
-    btn.textContent = 'submit →';
-  }
+async function initViews() {
+  try {
+    // upsert a single row for the profile page
+    await sb('page_views?page=eq.home', {
+      method: 'POST',
+      prefer: 'resolution=merge-duplicates',
+      body: { page: 'home', views: 1 },
+      headers: { Prefer: 'resolution=merge-duplicates' }
+    }).catch(() => {});
 
-  async function loadContrib() {
-    const grid = document.getElementById('contrib-grid');
-    const note = document.getElementById('contrib-note');
-
-    // Use a CORS proxy to fetch GitHub contributions
-    const urls = [
-      'https://github-contributions-api.jogruber.de/v4/92SFC-SucharikiFlintCom?y=last',
-      'https://github-contributions-api.jogruber.de/v4/sucharikiflintcom?y=last'
-    ];
-
-    let data = null;
-    for (const url of urls) {
-      try {
-        const res = await fetch(url);
-        if (res.ok) { data = await res.json(); break; }
-      } catch(e) {}
-    }
-
-    grid.innerHTML = '';
-
-    if (data && data.contributions) {
-      data.contributions.forEach(week => {
-        const col = document.createElement('div');
-        col.className = 'contrib-col';
-        week.forEach(day => {
-          const cell = document.createElement('div');
-          cell.className = 'cell' + (day.level ? ' l' + day.level : '');
-          cell.title = day.date + ': ' + day.count;
-          col.appendChild(cell);
-        });
-        grid.appendChild(col);
+    // try rpc increment first
+    let data;
+    try {
+      data = await sb('rpc/increment_views', {
+        method: 'POST',
+        body: { page_name: 'home' }
       });
-      const total = (data.total && data.total.lastYear) || 0;
-      note.textContent = total + ' contributions in the last year';
-    } else {
-      // render dark empty grid as fallback
-      for (let w = 0; w < 53; w++) {
-        const col = document.createElement('div');
-        col.className = 'contrib-col';
-        for (let d = 0; d < 7; d++) {
-          const cell = document.createElement('div');
-          cell.className = 'cell';
-          col.appendChild(cell);
-        }
-        grid.appendChild(col);
-      }
-      note.textContent = 'github activity · last year';
+    } catch {
+      // fallback: just read
+      data = null;
     }
+
+    // read current count
+    const rows = await sb('page_views?page=eq.home&select=views');
+    const v = rows?.[0]?.views ?? '—';
+    document.getElementById('views-count').textContent = v + ' views';
+  } catch (e) {
+    document.getElementById('views-count').textContent = '— views';
+  }
+}
+
+initViews();
+
+/* -------- GITHUB CONTRIBUTIONS -------- */
+let showAllWeeks = false;
+
+async function loadGithub() {
+  const wrap = document.getElementById('contrib-grid');
+
+  // Build skeleton
+  const skelWrap = document.getElementById('skel-wrap');
+  for (let i = 0; i < 53; i++) {
+    const col = document.createElement('div');
+    col.style.cssText = 'display:flex;flex-direction:column;gap:3px;';
+    for (let j = 0; j < 7; j++) {
+      const c = document.createElement('div');
+      c.className = 'day-cell skeleton';
+      col.appendChild(c);
+    }
+    skelWrap.appendChild(col);
   }
 
-  function esc(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  try {
+    // Use GitHub contribution API via a CORS proxy / public endpoint
+    const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GH_USER}?y=last`);
+    if (!res.ok) throw new Error('fetch failed');
+    const json = await res.json();
+    const contributions = json.contributions; // array of {date, count, level}
+
+    wrap.innerHTML = '';
+    // Group by week
+    const weeks = [];
+    let week = [];
+    contributions.forEach((day, i) => {
+      week.push(day);
+      if (week.length === 7) { weeks.push(week); week = []; }
+    });
+    if (week.length) weeks.push(week);
+
+    const totalContribs = contributions.reduce((s, d) => s + d.count, 0);
+    document.getElementById('contrib-total').textContent = totalContribs.toLocaleString() + ' contributions in the last year';
+
+    weeks.forEach(wk => {
+      const col = document.createElement('div');
+      col.className = 'week-col';
+      wk.forEach(day => {
+        const cell = document.createElement('div');
+        cell.className = 'day-cell';
+        cell.dataset.level = day.level;
+        cell.title = day.count + ' contributions on ' + day.date;
+        col.appendChild(cell);
+      });
+      wrap.appendChild(col);
+    });
+
+  } catch (e) {
+    wrap.innerHTML = '<p class="error-msg">could not load activity</p>';
+    document.getElementById('contrib-total').textContent = '';
+  }
+}
+
+loadGithub();
+
+/* -------- COMMENTS -------- */
+let allComments = [];
+const VISIBLE = 3;
+let expanded = false;
+
+function timeAgo(dateStr) {
+  const diff = (Date.now() - new Date(dateStr)) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  if (diff < 2592000) return Math.floor(diff/86400) + 'd ago';
+  return new Date(dateStr).toLocaleDateString('en', { month:'short', day:'numeric' });
+}
+
+function renderComments() {
+  const list = document.getElementById('comments-list');
+  list.innerHTML = '';
+
+  if (!allComments.length) {
+    list.innerHTML = '<p class="error-msg">no comments yet. be the first.</p>';
+    return;
   }
 
-  function timeAgo(date) {
-    const s = Math.floor((Date.now() - date) / 1000);
-    if (s < 60) return 'just now';
-    if (s < 3600) return Math.floor(s / 60) + 'm ago';
-    if (s < 86400) return Math.floor(s / 3600) + 'h ago';
-    return Math.floor(s / 86400) + 'd ago';
+  const toShow = expanded ? allComments : allComments.slice(0, VISIBLE);
+
+  toShow.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'comment';
+    el.innerHTML = `
+      <div class="comment-header">
+        <span class="comment-author">${escHtml(c.author)}</span>
+        <span class="comment-time">${timeAgo(c.created_at)}</span>
+      </div>
+      <p class="comment-text">${escHtml(c.text)}</p>
+    `;
+    list.appendChild(el);
+  });
+
+  if (allComments.length > VISIBLE) {
+    const btn = document.createElement('button');
+    btn.className = 'show-more-btn';
+    if (!expanded) {
+      btn.textContent = `show ${allComments.length - VISIBLE} more`;
+      btn.onclick = () => { expanded = true; renderComments(); };
+    } else {
+      btn.textContent = 'show less';
+      btn.onclick = () => { expanded = false; renderComments(); };
+    }
+    list.appendChild(btn);
+  }
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function loadComments() {
+  try {
+    const data = await sb('comments?select=*&order=created_at.desc');
+    allComments = data || [];
+    renderComments();
+  } catch(e) {
+    document.getElementById('comments-loading').textContent = 'could not load comments.';
+  }
+}
+
+loadComments();
+
+/* -------- SUBMIT COMMENT -------- */
+document.getElementById('submit-btn').onclick = async () => {
+  const author = document.getElementById('inp-name').value.trim();
+  const url = document.getElementById('inp-url').value.trim();
+  const text = document.getElementById('inp-text').value.trim();
+  const status = document.getElementById('form-status');
+  const btn = document.getElementById('submit-btn');
+
+  if (!author || !text) {
+    status.className = 'form-status err';
+    status.textContent = 'name and comment required';
+    return;
   }
 
-  incrementViews();
-  loadComments();
-  loadContrib();
+  btn.disabled = true;
+  status.className = 'form-status';
+  status.textContent = 'sending...';
+
+  try {
+    await sb('comments', {
+      method: 'POST',
+      prefer: 'return=minimal',
+      body: { author, text, url: url || null }
+    });
+    status.className = 'form-status ok';
+    status.textContent = 'sent ✓';
+    document.getElementById('inp-name').value = '';
+    document.getElementById('inp-url').value = '';
+    document.getElementById('inp-text').value = '';
+    await loadComments();
+  } catch(e) {
+    status.className = 'form-status err';
+    status.textContent = 'error. try again.';
+  } finally {
+    btn.disabled = false;
+  }
+};
 </script>
 </body>
 </html>
