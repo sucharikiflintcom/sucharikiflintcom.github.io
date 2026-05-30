@@ -316,7 +316,6 @@
 <div class="comment-form">
   <div class="form-row">
     <input type="text" id="inp-name" placeholder="name" maxlength="40">
-    <input type="text" id="inp-url" placeholder="url (optional)" maxlength="100">
   </div>
   <textarea id="inp-text" rows="3" placeholder="leave a comment..." maxlength="500"></textarea>
   <div style="display:flex;align-items:center;gap:16px;">
@@ -357,18 +356,13 @@ async function sb(path, opts = {}) {
 
 async function initViews() {
   try {
-    await sb('page_views?page=eq.home', {
-      method: 'POST',
-      prefer: 'resolution=merge-duplicates',
-      body: { page: 'home', views: 1 },
-      headers: { Prefer: 'resolution=merge-duplicates' }
-    }).catch(() => {});
-    try {
-      await sb('rpc/increment_views', { method: 'POST', body: { page_name: 'home' } });
-    } catch {}
-    const rows = await sb('page_views?page=eq.home&select=views');
-    const v = rows?.[0]?.views ?? '—';
-    document.getElementById('views-count').textContent = v + ' views';
+    const rows = await sb('views?id=eq.1&select=count');
+    const current = rows?.[0]?.count ?? 0;
+    await sb('views?id=eq.1', {
+      method: 'PATCH',
+      body: { count: current + 1 }
+    });
+    document.getElementById('views-count').textContent = (current + 1) + ' views';
   } catch (e) {
     document.getElementById('views-count').textContent = '— views';
   }
@@ -450,10 +444,10 @@ function renderComments() {
     el.className = 'comment';
     el.innerHTML = `
       <div class="comment-header">
-        <span class="comment-author">${escHtml(c.author)}</span>
+        <span class="comment-author">${escHtml(c.name)}</span>
         <span class="comment-time">${timeAgo(c.created_at)}</span>
       </div>
-      <p class="comment-text">${escHtml(c.text)}</p>
+      <p class="comment-text">${escHtml(c.message)}</p>
     `;
     list.appendChild(el);
   });
@@ -489,7 +483,6 @@ loadComments();
 
 document.getElementById('submit-btn').onclick = async () => {
   const author = document.getElementById('inp-name').value.trim();
-  const url = document.getElementById('inp-url').value.trim();
   const text = document.getElementById('inp-text').value.trim();
   const status = document.getElementById('form-status');
   const btn = document.getElementById('submit-btn');
@@ -505,12 +498,11 @@ document.getElementById('submit-btn').onclick = async () => {
     await sb('comments', {
       method: 'POST',
       prefer: 'return=minimal',
-      body: { author, text, url: url || null }
+      body: { name: author, message: text }
     });
     status.className = 'form-status ok';
     status.textContent = 'sent ✓';
     document.getElementById('inp-name').value = '';
-    document.getElementById('inp-url').value = '';
     document.getElementById('inp-text').value = '';
     await loadComments();
   } catch(e) {
