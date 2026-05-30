@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aleksandr Kojima</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Lora:wght@400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #161614;
+      color: #7a7a74;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    main {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 5rem 2rem 7rem;
+    }
+
+    .name {
+      font-family: 'Lora', serif;
+      font-size: 28px;
+      color: #e8e4dc;
+      font-weight: 400;
+      letter-spacing: -.01em;
+      margin-bottom: 4rem;
+    }
+
+    .label {
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #3a3a38;
+      margin-bottom: .7rem;
+    }
+
+    .count {
+      font-size: 44px;
+      font-weight: 300;
+      color: #e8e4dc;
+      line-height: 1;
+      letter-spacing: -.02em;
+    }
+
+    .count-sub {
+      font-size: 11px;
+      color: #3a3a38;
+      margin-top: .35rem;
+      letter-spacing: .04em;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #222;
+      margin: 2.5rem 0;
+    }
+
+    /* contributions */
+    .contrib-wrap { overflow-x: auto; }
+
+    #contrib-grid {
+      display: flex;
+      gap: 3px;
+      align-items: flex-start;
+    }
+
+    .contrib-col {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .contrib-col .cell {
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+      background: #1e1e1c;
+    }
+
+    .cell.l1 { background: #2e2c28; }
+    .cell.l2 { background: #4a4540; }
+    .cell.l3 { background: #6b6258; }
+    .cell.l4 { background: #8c7e70; }
+
+    .contrib-note {
+      font-size: 10px;
+      color: #3a3a38;
+      margin-top: .6rem;
+      letter-spacing: .04em;
+    }
+
+    /* comments */
+    .comments {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .cm {
+      padding-left: .9rem;
+      border-left: 1px solid #2a2a28;
+    }
+
+    .cm-meta {
+      font-size: 10px;
+      color: #3a3a38;
+      letter-spacing: .03em;
+      margin-bottom: .25rem;
+    }
+
+    .cm-text {
+      font-size: 13px;
+      color: #7a7a74;
+      line-height: 1.65;
+    }
+
+    .input-wrap {
+      margin-top: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
+    .inp {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #222;
+      color: #e8e4dc;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      padding: .5rem 0;
+      outline: none;
+      width: 100%;
+      transition: border-color .2s;
+    }
+
+    .inp:focus { border-bottom-color: #555; }
+    .inp::placeholder { color: #2e2e2c; }
+
+    .send {
+      align-self: flex-start;
+      margin-top: .5rem;
+      background: transparent;
+      border: none;
+      color: #3a3a38;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      cursor: pointer;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 0;
+      transition: color .2s;
+    }
+
+    .send:hover { color: #e8e4dc; }
+    .send:disabled { opacity: .3; cursor: default; }
+
+    .links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .links a {
+      font-size: 11px;
+      color: #3a3a38;
+      text-decoration: none;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .links a:hover { color: #e8e4dc; }
+  </style>
+</head>
+<body>
+<main>
+
+  <div class="name">Aleksandr Kojima</div>
+
+  <div class="label">visitors</div>
+  <div class="count" id="cnt">—</div>
+  <div class="count-sub">since the beginning</div>
+
+  <hr class="divider" />
+
+  <div class="label">contributions</div>
+  <div class="contrib-wrap">
+    <div id="contrib-grid"></div>
+  </div>
+  <div class="contrib-note" id="contrib-note">loading...</div>
+
+  <hr class="divider" />
+
+  <div class="label">comments</div>
+  <div class="comments" id="comments">
+    <div class="cm-meta" style="color:#2a2a2a;font-size:11px;">loading...</div>
+  </div>
+
+  <div class="input-wrap">
+    <input class="inp" id="nameIn" placeholder="name" maxlength="40" />
+    <input class="inp" id="msgIn" placeholder="leave a comment" maxlength="300" />
+    <button class="send" id="sendBtn" onclick="postComment()">submit →</button>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="links">
+    <a href="https://github.com/sucharikiflintcom" target="_blank">github</a>
+    <a href="#" target="_blank">telegram</a>
+    <a href="mailto:you@email.com">email</a>
+  </div>
+
+</main>
+
+<script>
+  const SUPABASE_URL = 'https://botozcvdxnmhikziqtbx.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvdG96Y3ZkeG5taGlremlxdGJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwOTQ4OTgsImV4cCI6MjA5NTY3MDg5OH0.kreHeUyGY5OoAzYlR1Kz4Nvbw1bHwkP4mAxFMahMg08';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  async function incrementViews() {
+    const { data } = await sb.from('views').select('count').eq('id', 1).single();
+    if (!data) return;
+    const newCount = data.count + 1;
+    await sb.from('views').update({ count: newCount }).eq('id', 1);
+    document.getElementById('cnt').textContent = newCount.toLocaleString();
+  }
+
+  async function loadComments() {
+    const { data } = await sb.from('comments').select('*').order('created_at', { ascending: false });
+    const el = document.getElementById('comments');
+    if (!data || data.length === 0) {
+      el.innerHTML = '<div class="cm-meta" style="color:#2a2a2a;font-size:11px;">no comments yet</div>';
+      return;
+    }
+    el.innerHTML = data.map(c => `
+      <div class="cm">
+        <div class="cm-meta">— ${esc(c.name)} · ${timeAgo(new Date(c.created_at))}</div>
+        <div class="cm-text">${esc(c.message)}</div>
+      </div>`).join('');
+  }
+
+  async function postComment() {
+    const name = document.getElementById('nameIn').value.trim() || 'stranger';
+    const message = document.getElementById('msgIn').value.trim();
+    if (!message) return;
+    const btn = document.getElementById('sendBtn');
+    btn.disabled = true;
+    btn.textContent = '...';
+    await sb.from('comments').insert({ name, message });
+    document.getElementById('nameIn').value = '';
+    document.getElementById('msgIn').value = '';
+    await loadComments();
+    btn.disabled = false;
+    btn.textContent = 'submit →';
+  }
+
+  async function loadContrib() {
+    const grid = document.getElementById('contrib-grid');
+    const note = document.getElementById('contrib-note');
+    try {
+      const res = await fetch('https://github-contributions-api.jogruber.de/v4/sucharikiflintcom?y=last');
+      const data = await res.json();
+      grid.innerHTML = '';
+      data.contributions.forEach(week => {
+        const col = document.createElement('div');
+        col.className = 'contrib-col';
+        week.forEach(day => {
+          const cell = document.createElement('div');
+          cell.className = 'cell' + (day.level ? ' l' + day.level : '');
+          cell.title = day.date + ': ' + day.count + ' contributions';
+          col.appendChild(cell);
+        });
+        grid.appendChild(col);
+      });
+      const total = data.total && data.total.lastYear || 0;
+      note.textContent = total + ' contributions in the last year';
+    } catch(e) {
+      note.textContent = 'could not load contributions';
+    }
+  }
+
+  function esc(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function timeAgo(date) {
+    const s = Math.floor((Date.now() - date) / 1000);
+    if (s < 60) return 'just now';
+    if (s < 3600) return Math.floor(s / 60) + 'm ago';
+    if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+    return Math.floor(s / 86400) + 'd ago';
+  }
+
+  incrementViews();
+  loadComments();
+  loadContrib();
+</script>
+</body>
+</html>
