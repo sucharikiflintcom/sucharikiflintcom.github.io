@@ -54,19 +54,15 @@
       border-top: 1px solid #222;
       margin: 2.5rem 0;
     }
-    .contrib-img {
-      width: 100%;
-      display: block;
-      filter: grayscale(1) brightness(.9) sepia(.3);
-      opacity: .85;
-      border-radius: 4px;
-    }
-    .contrib-note {
-      font-size: 11px;
-      color: #555550;
-      margin-top: .5rem;
-      letter-spacing: .04em;
-    }
+    .contrib-wrap { overflow-x: auto; padding-bottom: 2px; }
+    #contrib-grid { display: flex; gap: 3px; }
+    .contrib-col { display: flex; flex-direction: column; gap: 3px; }
+    .cell { width: 11px; height: 11px; border-radius: 2px; background: #0e0e0c; }
+    .cell.l1 { background: #2e2c28; }
+    .cell.l2 { background: #4e4840; }
+    .cell.l3 { background: #6e6258; }
+    .cell.l4 { background: #9a8c7e; }
+    .contrib-note { font-size: 11px; color: #555550; margin-top: .6rem; letter-spacing: .04em; }
     .comments { display: flex; flex-direction: column; gap: 1.2rem; }
     .cm { padding-left: .9rem; border-left: 1px solid #2e2e2c; }
     .cm-meta { font-size: 11px; color: #555550; letter-spacing: .03em; margin-bottom: .25rem; }
@@ -105,17 +101,6 @@
     }
     .send:hover { color: #e8e4dc; }
     .send:disabled { opacity: .3; cursor: default; }
-    .links { display: flex; gap: 2rem; }
-    .links a {
-      font-size: 11px;
-      color: #555550;
-      text-decoration: none;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      transition: color .2s;
-    }
-    .links a:hover { color: #e8e4dc; }
-
     @media (max-width: 600px) {
       main { padding: 3.5rem 1.5rem 5rem; }
     }
@@ -133,13 +118,10 @@
   <hr class="divider" />
 
   <div class="label">contributions</div>
-  <img
-    class="contrib-img"
-    src="https://ghchart.rshah.org/9a8c7e/sucharikiflintcom"
-    alt="GitHub contributions"
-    onerror="this.parentElement.style.display='none'"
-  />
-  <div class="contrib-note">github activity · last year</div>
+  <div class="contrib-wrap">
+    <div id="contrib-grid"></div>
+  </div>
+  <div class="contrib-note" id="contrib-note">loading...</div>
 
   <hr class="divider" />
 
@@ -152,14 +134,6 @@
     <input class="inp" id="nameIn" placeholder="name" maxlength="40" />
     <input class="inp" id="msgIn" placeholder="leave a comment" maxlength="300" />
     <button class="send" id="sendBtn" onclick="postComment()">submit →</button>
-  </div>
-
-  <hr class="divider" />
-
-  <div class="links">
-    <a href="https://github.com/sucharikiflintcom" target="_blank">github</a>
-    <a href="#" target="_blank">telegram</a>
-    <a href="mailto:you@email.com">email</a>
   </div>
 
 </main>
@@ -205,6 +179,56 @@
     btn.textContent = 'submit →';
   }
 
+  async function loadContrib() {
+    const grid = document.getElementById('contrib-grid');
+    const note = document.getElementById('contrib-note');
+
+    // Use a CORS proxy to fetch GitHub contributions
+    const urls = [
+      'https://github-contributions-api.jogruber.de/v4/92SFC-SucharikiFlintCom?y=last',
+      'https://github-contributions-api.jogruber.de/v4/sucharikiflintcom?y=last'
+    ];
+
+    let data = null;
+    for (const url of urls) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) { data = await res.json(); break; }
+      } catch(e) {}
+    }
+
+    grid.innerHTML = '';
+
+    if (data && data.contributions) {
+      data.contributions.forEach(week => {
+        const col = document.createElement('div');
+        col.className = 'contrib-col';
+        week.forEach(day => {
+          const cell = document.createElement('div');
+          cell.className = 'cell' + (day.level ? ' l' + day.level : '');
+          cell.title = day.date + ': ' + day.count;
+          col.appendChild(cell);
+        });
+        grid.appendChild(col);
+      });
+      const total = (data.total && data.total.lastYear) || 0;
+      note.textContent = total + ' contributions in the last year';
+    } else {
+      // render dark empty grid as fallback
+      for (let w = 0; w < 53; w++) {
+        const col = document.createElement('div');
+        col.className = 'contrib-col';
+        for (let d = 0; d < 7; d++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          col.appendChild(cell);
+        }
+        grid.appendChild(col);
+      }
+      note.textContent = 'github activity · last year';
+    }
+  }
+
   function esc(str) {
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
@@ -219,6 +243,7 @@
 
   incrementViews();
   loadComments();
+  loadContrib();
 </script>
 </body>
 </html>
