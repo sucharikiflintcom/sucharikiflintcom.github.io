@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aleksandr Kojima</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -34,11 +34,10 @@
     margin: 0 auto;
   }
 
-  /* --- HEADER --- */
-  .header { width: 100%; margin-bottom: 72px; }
+  .header { width: 100%; margin-bottom: 32px; }
 
   .name {
-    font-family: 'Instrument Serif', serif;
+    font-family: 'Share Tech Mono', monospace;
     font-size: clamp(2.4rem, 6vw, 3.6rem);
     font-weight: 400;
     letter-spacing: -0.02em;
@@ -46,7 +45,7 @@
     color: var(--text);
   }
 
-  .name em { font-style: italic; color: var(--accent); }
+  .name em { color: var(--accent); }
 
   .tagline {
     margin-top: 16px;
@@ -57,7 +56,6 @@
     max-width: 380px;
   }
 
-  /* --- VIEWS --- */
   .views-row {
     display: flex;
     align-items: center;
@@ -83,7 +81,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* --- SECTION LABEL --- */
   .section-label {
     width: 100%;
     font-size: 10px;
@@ -91,10 +88,9 @@
     text-transform: uppercase;
     color: var(--muted);
     margin-bottom: 16px;
-    margin-top: 56px;
+    margin-top: 24px;
   }
 
-  /* --- GITHUB GRID --- */
   .contrib-wrap {
     width: 100%;
     overflow-x: auto;
@@ -147,7 +143,6 @@
   .legend-cell.l3 { background: #2da44e; border-color: #38c65e; }
   .legend-cell.l4 { background: #4ade80; border-color: #6bef99; }
 
-  /* --- DIVIDER --- */
   .divider {
     width: 100%;
     height: 1px;
@@ -155,7 +150,6 @@
     margin-top: 56px;
   }
 
-  /* --- COMMENTS --- */
   .comments-list { width: 100%; display: flex; flex-direction: column; gap: 12px; }
 
   .comment {
@@ -196,7 +190,6 @@
 
   .show-more-btn:hover { border-color: var(--border-hover); color: var(--text); }
 
-  /* --- COMMENT FORM --- */
   .comment-form {
     width: 100%;
     margin-top: 24px;
@@ -249,7 +242,6 @@
   .form-status.ok { color: #4ade80; }
   .form-status.err { color: #f87171; }
 
-  /* --- FOOTER --- */
   .footer {
     width: 100%;
     margin-top: 72px;
@@ -263,7 +255,6 @@
   .footer-name { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
   .footer-year { font-size: 11px; color: var(--muted); }
 
-  /* --- SKELETON --- */
   .skeleton {
     background: linear-gradient(90deg, var(--surface) 25%, #1a1a1e 50%, var(--surface) 75%);
     background-size: 200% 100%;
@@ -277,17 +268,15 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="header">
   <h1 class="name">Aleksandr <em>Kojima</em></h1>
-  <p class="tagline">building things quietly.</p>
+  <p class="tagline">the dead don't bite.</p>
   <div class="views-row">
     <div class="views-dot"></div>
     <span class="views-count" id="views-count">— views</span>
   </div>
 </header>
 
-<!-- GITHUB ACTIVITY -->
 <p class="section-label">github activity</p>
 <div class="contrib-wrap">
   <div id="contrib-grid"><div style="display:flex;gap:3px;" id="skel-wrap"></div></div>
@@ -307,7 +296,6 @@
 
 <div class="divider"></div>
 
-<!-- COMMENTS -->
 <p class="section-label">comments</p>
 <div class="comments-list" id="comments-list">
   <p class="error-msg" id="comments-loading">loading...</p>
@@ -324,9 +312,8 @@
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer class="footer">
-  <span class="footer-name">aleksandr kojima</span>
+  <span class="footer-name">made with ♥ by SFC &amp; SFC Team</span>
   <span class="footer-year" id="footer-year"></span>
 </footer>
 
