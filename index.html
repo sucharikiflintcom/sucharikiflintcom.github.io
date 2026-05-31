@@ -32,6 +32,7 @@
     padding: 80px 48px 120px;
     max-width: 900px;
     margin: 0 auto;
+    
   }
 
   .header { width: 100%; margin-bottom: 32px; }
@@ -59,26 +60,26 @@
   .views-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     margin-top: 28px;
   }
 
-  .views-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--muted);
-    animation: pulse 3s ease-in-out infinite;
+  .eye-wrap {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
+  #eye-svg {
+    width: 22px;
+    height: 14px;
+    overflow: visible;
   }
 
   .views-count {
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
   }
 
   .section-label {
@@ -111,7 +112,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     transition: border-color 0.15s;
-    cursor: default;
+    
   }
 
   .day-cell:hover { border-color: var(--border-hover); }
@@ -182,7 +183,7 @@
     letter-spacing: 0.05em;
     padding: 10px 20px;
     border-radius: 4px;
-    cursor: pointer;
+    
     width: 100%;
     margin-top: 4px;
     transition: border-color 0.2s, color 0.2s;
@@ -213,6 +214,7 @@
     outline: none;
     transition: border-color 0.2s;
     resize: none;
+    
   }
 
   .comment-form input::placeholder,
@@ -230,13 +232,13 @@
     letter-spacing: 0.08em;
     padding: 11px 24px;
     border-radius: 4px;
-    cursor: pointer;
+    
     align-self: flex-start;
     transition: background 0.2s, border-color 0.2s;
   }
 
   .submit-btn:hover { background: rgba(255,255,255,0.05); }
-  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .submit-btn:disabled { opacity: 0.4;  }
 
   .form-status { font-size: 12px; color: var(--muted); }
   .form-status.ok { color: #4ade80; }
@@ -264,6 +266,8 @@
   @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
   .error-msg { font-size: 12px; color: var(--muted); padding: 16px 0; }
+
+  a, button, input, textarea, select {  }
 </style>
 </head>
 <body>
@@ -272,7 +276,21 @@
   <h1 class="name">Aleksandr <em>Kojima</em></h1>
   <p class="tagline">the dead don't bite.</p>
   <div class="views-row">
-    <div class="views-dot"></div>
+    <div class="eye-wrap">
+      <svg id="eye-svg" viewBox="0 0 22 14" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <clipPath id="eye-clip">
+            <path d="M1 7 C4 1, 18 1, 21 7 C18 13, 4 13, 1 7 Z"/>
+          </clipPath>
+        </defs>
+        <path d="M1 7 C4 1, 18 1, 21 7 C18 13, 4 13, 1 7 Z" fill="#1a1a1c"/>
+        <path d="M1 7 C4 1, 18 1, 21 7 C18 13, 4 13, 1 7 Z" fill="none" stroke="#5a5a56" stroke-width="1.2"/>
+        <circle id="eye-iris" cx="11" cy="7" r="3.4" fill="#4a4a46"/>
+        <circle id="eye-pupil" cx="11" cy="7" r="1.8" fill="#0a0a0b"/>
+        <rect id="eye-lid-top" x="1" y="1" width="20" height="0" fill="#0a0a0b" clip-path="url(#eye-clip)"/>
+        <rect id="eye-lid-bot" x="1" y="13" width="20" height="0" fill="#0a0a0b" clip-path="url(#eye-clip)"/>
+      </svg>
+    </div>
     <span class="views-count" id="views-count">— views</span>
   </div>
 </header>
@@ -323,6 +341,51 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const GH_USER = 'sucharikiflintcom';
 
 document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+(function() {
+  const lidTop = document.getElementById('eye-lid-top');
+  const lidBot = document.getElementById('eye-lid-bot');
+
+  function setLid(el, y, h) {
+    el.setAttribute('y', y);
+    el.setAttribute('height', h);
+  }
+
+  function blink() {
+    const dur = 80;
+    const stay = 50;
+    const steps = 6;
+    let step = 0;
+
+    const closeId = setInterval(() => {
+      step++;
+      const progress = step / steps;
+      setLid(lidTop, 1, progress * 6);
+      setLid(lidBot, 13 - progress * 6, progress * 6);
+      if (step >= steps) {
+        clearInterval(closeId);
+        setTimeout(() => {
+          let step2 = 0;
+          const openId = setInterval(() => {
+            step2++;
+            const p = step2 / steps;
+            setLid(lidTop, 1, (1 - p) * 6);
+            setLid(lidBot, 7 + p * 6, (1 - p) * 6);
+            if (step2 >= steps) {
+              clearInterval(openId);
+              setLid(lidTop, 1, 0);
+              setLid(lidBot, 13, 0);
+            }
+          }, dur / steps);
+        }, stay);
+      }
+    }, dur / steps);
+  }
+
+  setLid(lidTop, 1, 0);
+  setLid(lidBot, 13, 0);
+  setInterval(blink, 3000);
+})();
 
 async function sb(path, opts = {}) {
   const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
