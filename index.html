@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aleksandr Kojima</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0b'/%3E%3Ctext x='16' y='23' font-family='monospace' font-size='18' fill='%23c8c4b0' text-anchor='middle'%3EAK%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -712,6 +713,42 @@ document.getElementById('submit-btn').onclick = async () => {
     btn.disabled = false;
   }
 };
+</script>
+
+<script>
+// --- title ticker ---
+const TICKER_TEXT = 'Aleksandr Kojima  ·  ';
+const AWAY_TITLES = ['( ˘ω˘ ) zzz', 'come back...', 'still here...', 'psst. hey.', '¯\_(ツ)_/¯'];
+let tickerFrame, awayFrame;
+
+function runTicker() {
+  clearTimeout(awayFrame);
+  let i = 0;
+  function step() {
+    const full = TICKER_TEXT + TICKER_TEXT;
+    document.title = full.slice(i, i + TICKER_TEXT.length);
+    i = (i + 1) % TICKER_TEXT.length;
+    tickerFrame = setTimeout(step, 120);
+  }
+  step();
+}
+
+function runAway() {
+  clearTimeout(tickerFrame);
+  let idx = 0;
+  function step() {
+    document.title = AWAY_TITLES[idx % AWAY_TITLES.length];
+    idx++;
+    awayFrame = setTimeout(step, 1800);
+  }
+  step();
+}
+
+document.addEventListener('visibilitychange', () => {
+  document.hidden ? runAway() : (clearTimeout(awayFrame), runTicker());
+});
+
+runTicker();
 </script>
 
 <nav class="social-bar" aria-label="social links">
