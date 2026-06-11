@@ -323,7 +323,61 @@
 
   .social-discord:hover { color: var(--text); opacity: 1; }
 
-  .social-dock {
+  .tag-bar {
+    position: fixed;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 10;
+    align-items: flex-end;
+  }
+
+  .tag-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+  }
+
+  .tag-group-label {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+    text-align: right;
+  }
+
+  .tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .tag:hover { border-color: var(--border-hover); color: var(--accent); }
+
+  .tag svg {
+    width: 11px;
+    height: 11px;
+    fill: currentColor;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 1200px) {
+    .tag-bar { display: none; }
+  }
     display: none;
   }
 
@@ -696,6 +750,39 @@ document.getElementById('submit-btn').onclick = async () => {
     discord
   </span>
 </nav>
+
+<aside class="tag-bar">
+  <div class="tag-group">
+    <p class="tag-group-label">code</p>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zm-7.8 14.5L9 12.9l-1.7 1.7-1.1-1.1 2.8-2.8L11.8 13l3.7-4.8 1.2.9z"/></svg>JavaScript</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zm-7.8 14.5L9 12.9l-1.7 1.7-1.1-1.1 2.8-2.8L11.8 13l3.7-4.8 1.2.9z"/></svg>TypeScript</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zm-7.8 14.5L9 12.9l-1.7 1.7-1.1-1.1 2.8-2.8L11.8 13l3.7-4.8 1.2.9z"/></svg>Python</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zm-7.8 14.5L9 12.9l-1.7 1.7-1.1-1.1 2.8-2.8L11.8 13l3.7-4.8 1.2.9z"/></svg>Go</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zm-7.8 14.5L9 12.9l-1.7 1.7-1.1-1.1 2.8-2.8L11.8 13l3.7-4.8 1.2.9z"/></svg>C# · .NET</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zm-7.8 14.5L9 12.9l-1.7 1.7-1.1-1.1 2.8-2.8L11.8 13l3.7-4.8 1.2.9z"/></svg>SQL · HCL · YAML</span>
+  </div>
+
+  <div class="tag-group">
+    <p class="tag-group-label">writing</p>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M19.4 7.34L16.66 4.6A2 2 0 0014 4.53l-9 9a2 2 0 00-.57 1.21L4 18.91a1 1 0 001 1.1h.09l4.17-.38a2 2 0 001.21-.57l9-9a1.92 1.92 0 00-.07-2.72zM9.08 17.62l-3 .28.27-3L12 9.32l2.7 2.7zM16 10.68L13.32 8l1.95-2L18 8.707z"/></svg>проза</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M19.4 7.34L16.66 4.6A2 2 0 0014 4.53l-9 9a2 2 0 00-.57 1.21L4 18.91a1 1 0 001 1.1h.09l4.17-.38a2 2 0 001.21-.57l9-9a1.92 1.92 0 00-.07-2.72zM9.08 17.62l-3 .28.27-3L12 9.32l2.7 2.7zM16 10.68L13.32 8l1.95-2L18 8.707z"/></svg>рассказы</span>
+  </div>
+
+  <div class="tag-group">
+    <p class="tag-group-label">music</p>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13M9 18c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-2c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>Depeche Mode</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13M9 18c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-2c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>Стрыкало</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13M9 18c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-2c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>変態紳士クラブ</span>
+  </div>
+
+  <div class="tag-group">
+    <p class="tag-group-label">games</p>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 00-2 2v8a2 2 0 002 2h18a2 2 0 002-2V8a2 2 0 00-2-2zm-10 7H9v2H7v-2H5v-2h2V9h2v2h2v2zm4.5 1a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm3-3a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>Apex Legends</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 00-2 2v8a2 2 0 002 2h18a2 2 0 002-2V8a2 2 0 00-2-2zm-10 7H9v2H7v-2H5v-2h2V9h2v2h2v2zm4.5 1a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm3-3a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>Binding of Isaac</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 00-2 2v8a2 2 0 002 2h18a2 2 0 002-2V8a2 2 0 00-2-2zm-10 7H9v2H7v-2H5v-2h2V9h2v2h2v2zm4.5 1a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm3-3a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>osu!</span>
+    <span class="tag"><svg viewBox="0 0 24 24"><path d="M21 6H3a2 2 0 00-2 2v8a2 2 0 002 2h18a2 2 0 002-2V8a2 2 0 00-2-2zm-10 7H9v2H7v-2H5v-2h2V9h2v2h2v2zm4.5 1a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm3-3a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>Minecraft</span>
+  </div>
+</aside>
 
 </body>
 </html>
