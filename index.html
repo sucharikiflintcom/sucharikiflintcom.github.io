@@ -268,6 +268,107 @@
   .error-msg { font-size: 12px; color: var(--muted); padding: 16px 0; }
 
   a, button, input, textarea, select {  }
+
+  .social-bar {
+    position: fixed;
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 10;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+    white-space: nowrap;
+    opacity: 0.5;
+  }
+
+  .social-link:hover { color: var(--text); opacity: 1; }
+
+  .social-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .social-label { display: none; }
+
+  .social-discord {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+    white-space: nowrap;
+    cursor: default;
+    user-select: all;
+    opacity: 0.5;
+  }
+
+  .social-discord:hover { color: var(--text); opacity: 1; }
+
+  .social-dock {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .social-bar { display: none; }
+    .social-dock {
+      display: flex;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      justify-content: center;
+      gap: 0;
+      background: rgba(10,10,11,0.92);
+      border-top: 1px solid var(--border);
+      padding: 14px 0 18px;
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+    .dock-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      padding: 0 20px;
+      transition: color 0.2s, opacity 0.2s;
+      opacity: 0.5;
+    }
+    .dock-item:hover { color: var(--text); opacity: 1; }
+    .dock-icon {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    body { padding-bottom: 90px; }
+  }
 </style>
 </head>
 <body>
@@ -563,5 +664,44 @@ document.getElementById('submit-btn').onclick = async () => {
   }
 };
 </script>
+
+<nav class="social-bar" aria-label="social links">
+  <a class="social-link" href="https://t.me/sfc_sucharikiflintcom" target="_blank" rel="noopener">
+    <svg class="social-icon" viewBox="0 0 24 24"><path d="M21.5 4.5L2.5 11.5l7 2m12-9l-5 16-5-7m10-9L9.5 13.5m0 0v6l3-3"/></svg>
+    <span class="social-label">telegram</span>
+  </a>
+  <a class="social-link" href="https://t.me/lophdxa" target="_blank" rel="noopener">
+    <svg class="social-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H4z"/><path d="M8 20h8M12 16v4"/></svg>
+    <span class="social-label">channel</span>
+  </a>
+  <a class="social-link" href="https://steamcommunity.com/id/sucharikiflintcom/" target="_blank" rel="noopener">
+    <svg class="social-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M8.5 15.5l-4 4"/></svg>
+    <span class="social-label">steam</span>
+  </a>
+  <span class="social-discord" title="discord">
+    <svg class="social-icon" viewBox="0 0 24 24"><path d="M9 12h.01M15 12h.01M8.5 8.5S9.5 7 12 7s3.5 1.5 3.5 1.5M8.5 15.5S9.5 17 12 17s3.5-1.5 3.5-1.5M5 7s1-1.5 3-2l1 2M19 7s-1-1.5-3-2l-1 2M5 17s1 1.5 3 2l1-2M19 17s-1 1.5-3 2l-1-2M5 7c-1 3-1 7 0 10M19 7c1 3 1 7 0 10"/></svg>
+    <span class="social-label">sfc_sucharikiflintcom</span>
+  </span>
+</nav>
+
+<nav class="social-dock" aria-label="social links">
+  <a class="dock-item" href="https://t.me/sfc_sucharikiflintcom" target="_blank" rel="noopener">
+    <svg class="dock-icon" viewBox="0 0 24 24"><path d="M21.5 4.5L2.5 11.5l7 2m12-9l-5 16-5-7m10-9L9.5 13.5m0 0v6l3-3"/></svg>
+    tg
+  </a>
+  <a class="dock-item" href="https://t.me/lophdxa" target="_blank" rel="noopener">
+    <svg class="dock-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H4z"/><path d="M8 20h8M12 16v4"/></svg>
+    channel
+  </a>
+  <a class="dock-item" href="https://steamcommunity.com/id/sucharikiflintcom/" target="_blank" rel="noopener">
+    <svg class="dock-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M8.5 15.5l-4 4"/></svg>
+    steam
+  </a>
+  <span class="dock-item" title="discord: sfc_sucharikiflintcom" style="cursor:default;user-select:all;">
+    <svg class="dock-icon" viewBox="0 0 24 24"><path d="M9 12h.01M15 12h.01M8.5 8.5S9.5 7 12 7s3.5 1.5 3.5 1.5M8.5 15.5S9.5 17 12 17s3.5-1.5 3.5-1.5M5 7s1-1.5 3-2l1 2M19 7s-1-1.5-3-2l-1 2M5 17s1 1.5 3 2l1-2M19 17s-1 1.5-3 2l-1-2M5 7c-1 3-1 7 0 10M19 7c1 3 1 7 0 10"/></svg>
+    discord
+  </span>
+</nav>
+
 </body>
 </html>
